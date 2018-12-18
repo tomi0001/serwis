@@ -13,93 +13,89 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('patients', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
+//            $table->charset('utf8mb4');
+            //$table->collate('utf8mb4_unicode_ci'); 
+
+            $table->increments('id');
+            $table->rememberToken();
+            $table->timestamps();
+            $table->string("name");
+            $table->string("lastname");
+            $table->date("date_born");
+            $table->char("pesel",11);
+            $table->string("adress");
+            $table->unsignedTinyInteger("sex");
+            $table->string("telefon_nr");
+        });
+        Schema::create('doctors', function (Blueprint $table) {
             $table->engine = 'InnoDB';
 //            $table->charset('utf8mb4');
             //$table->collate('utf8mb4_unicode_ci'); 
 
             $table->increments('id');
             $table->string('login');
-            $table->string('email');
-            $table->string('password');
+            
+            $table->string("password");
             $table->rememberToken();
             $table->timestamps();
             $table->string("name");
             $table->string("lastname");
-            $table->date("date_born");
-            $table->datetime("date_register");
-            $table->string("city");
+            $table->string("specializations");
             $table->unsignedTinyInteger("sex");
             $table->string("telefon_nr");
-            $table->string("education");
-            $table->string("image");
-            $table->string("voivodeship");
-            $table->text("addiction");
-            $table->text("hobby");
-            $table->text("interested");
+            $table->unsignedTinyInteger("type");
+            $table->text("diseases");
         });
-        Schema::create('message', function (Blueprint $table) {
+        
+        Schema::create('patients_register', function (Blueprint $table) {
             $table->engine = 'InnoDB';
   //          $table->charset('utf8mb4');
             //$table->collate('utf8mb4_unicode_ci'); 
 
             $table->increments('id');
-            $table->text('message_text');
-            $table->Integer('users_id')->unsigned();
-            $table->foreign("users_id")->references("id")->on("users");
+            $table->Integer('patients_id')->unsigned();
+            $table->foreign("patients_id")->references("id")->on("patients");
+            $table->Integer('doctors_id')->unsigned();
+            $table->foreign("doctors_id")->references("id")->on("doctors");
             //$table->timestamps();
-            $table->string("title");
             $table->datetime("date");
+            $table->unsignedTinyInteger("if_visit");
             $table->timestamps();
             
         });
-        Schema::create('message_users', function (Blueprint $table) {
+        Schema::create('visit', function (Blueprint $table) {
             $table->engine = 'InnoDB';
-    //        $table->charset('utf8mb4');
+  //          $table->charset('utf8mb4');
             //$table->collate('utf8mb4_unicode_ci'); 
 
             $table->increments('id');
-            $table->text('message_text');
-            $table->Integer('message_id')->unsigned();
-            $table->foreign("message_id")->references("id")->on("message");
+            $table->Integer('patients_id')->unsigned();
+            $table->foreign("patients_id")->references("id")->on("patients");
+            $table->text('visit_text');
+            $table->Integer('doctors_id')->unsigned();
+            $table->foreign("doctors_id")->references("id")->on("doctors");
             //$table->timestamps();
             $table->datetime("date");
+            $table->text("drugs");
             $table->timestamps();
-           
+            
         });
-        Schema::create('statistic', function (Blueprint $table) {
+        Schema::create('admin', function (Blueprint $table) {
             $table->engine = 'InnoDB';
-      //      $table->charset('utf8mb4');
+  //          $table->charset('utf8mb4');
             //$table->collate('utf8mb4_unicode_ci'); 
 
             $table->increments('id');
-            $table->string('how_page');
-            $table->string('ip');
-            $table->string('http_user_agent');
-            $table->Integer('users_id')->unsigned();
-            $table->foreign("users_id")->references("id")->on("users");
-            $table->timestamps();
-          
+            $table->string('login');
+            
             //$table->timestamps();
-            $table->datetime("date");
-        });
-        Schema::create('forwarding_boyfriend', function (Blueprint $table) {
-            $table->engine = 'InnoDB';
-        //    $table->charset('utf8mb4');
-          //  $table->collate('utf8mb4_unicode_ci'); 
-
-            $table->increments('id');
-            $table->Integer('user_id_host');
-            $table->Integer('user_id_client');
-            $table->unsignedTinyInteger('type');
+            $table->string("password");
             $table->timestamps();
-            $table->datetime("date");
-            $table->integer("users_id_host")->unsigned();
-            $table->foreign("users_id_host")->references("id")->on("users");
-            $table->integer("users_id_client")->unsigned();
-            $table->foreign("users_id_client")->references("id")->on("users");
-
+            
         });
+
 
     }
 
@@ -110,11 +106,11 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
-        Schema::dropIfExists('message');
-        Schema::dropIfExists('message_users');
-        Schema::dropIfExists('statistic');
-        Schema::dropIfExists('forwarding_boyfriend');
+        Schema::dropIfExists('patients');
+        Schema::dropIfExists('doctors');
+        Schema::dropIfExists('visit');
+        Schema::dropIfExists('admin');
+
         
     }
 }

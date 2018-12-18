@@ -177,6 +177,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         'Collective\Html\HtmlServiceProvider',
+       
 
     ],
 
@@ -229,7 +230,7 @@ return [
         'Input' => Illuminate\Support\Facades\Input::class,
         'Form' => 'Collective\Html\FormFacade',
         'Html' => 'Collective\Html\HtmlFacade',
-      
+
 
     ],
 

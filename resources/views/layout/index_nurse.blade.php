@@ -6,18 +6,22 @@
 <script src="{{ asset('./java.js')}}"></script>
 
 <link href="{{ asset('./style.css') }}" rel="stylesheet"> 
-<div id='body'>
-    <div id="top">
-
-
-
+<br><br><br>
+<div id='main_admin'>
+    <div id='title_admin'>
+        <br>
+        <div class='title'>
+            <a class="title_admin" href="{{url('/admin/add_doctor')}}">Dodaj nowego lekarza</a>
+        </div>
+        <div class='title'>
+            <a class="title_admin" href="{{url('/admin/add_nurse')}}">Dodaj nową pielęgniarkę</a>
+        </div>
+        <div class='title'>
+            <a class="title_admin" href="{{url('/nurses/logout')}}">Wyloguj się</a>
+        </div>
     </div>
-<br>
-<div id='down'>
-    <a href="{{url('statistic')}}" class="menu">STATYSTYKI</a>
-    <a href="{{url('profile')}}" class="menu">MÓJ PROFIL</a>
-    <a href="{{url('show_search_friends')}}" class="menu">WYSZUKAJ</a>
+    @include ('layout.kalendar')
     
 </div>
-    @yield('content')
-</div>
+<br>
+@yield('content')

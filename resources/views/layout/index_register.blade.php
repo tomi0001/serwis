@@ -6,18 +6,7 @@
 <script src="{{ asset('./java.js')}}"></script>
 
 <link href="{{ asset('./style.css') }}" rel="stylesheet"> 
-<div id='body'>
-    <div id="top">
 
 
 
-    </div>
-<br>
-<div id='down'>
-    <a href="{{url('statistic')}}" class="menu">STATYSTYKI</a>
-    <a href="{{url('profile')}}" class="menu">MÓJ PROFIL</a>
-    <a href="{{url('show_search_friends')}}" class="menu">WYSZUKAJ</a>
-    
-</div>
-    @yield('content')
-</div>
+@yield('content')

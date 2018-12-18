@@ -1,44 +1,4 @@
-#top {
-    
-    width: 1300px;
-    height: 50px;
-    background-color: #116493;
-    opacity: 0.7;
-    margin-left: auto;
-    margin-right: auto;
-    
-    
-}
-#top_down {
-    
-    width: 100%;
-    height: 300px;
-    background-color: #699372;
-    opacity: 0.7;
-    
-    
-}
-.page {
-    
-    width: 900px;
-    margin-left: auto;
-    margin-right: auto;
-    
-}
-#down {
-    width: 1300px;
-    background-color: #116493;
-    opacity: 0.7;
-    
-    margin-left: auto;
-    margin-right: auto;
-    
-}
-span.white {
-    color: white;
-    
-    
-}
+
 body {
     background-image: url('./tlo.png'); /* from http://subtlepatterns.com */
     
@@ -47,9 +7,201 @@ body {
     
 }
 
-span.blad{
-    color: red;
+
+
+
+
+
+
+
+
+
+
+#register {
+    width: 700px;
+    min-height: 250px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #4154FF;
+    border-radius: 20px;
+    opacity: 0.8;
     
     
+}
+#title_register {
+    background-color: white;
+    width: 100%;
+    height: 40px;
+    border-radius: 20px 20px 0px 0px;
+    text-align: center;
+    font-size: 26px;
+    color: #10143E;
+    
+    
+}
+#register_table {
+    margin-left: auto;
+    margin-right: auto;
+    width: 76%;
+    
+    
+}
+#main_admin {
+    background-color: #4154FF;
+    width: 1000px;
+    min-height: 600px;
+    border-radius: 20px;
+    background-color: rgba(0,0,255,0.6);
+    margin-left: auto;
+    margin-right: auto;
+}
+#title_admin {
+    
+    background-color: white;
+    width: 100%;
+    height: 90px;
+    border-radius: 20px 20px 0px 0px;
+    float: left;
+    
+    
+}
+span.login {
+    font-size: 20px;
+    color: white;
+    
+    
+}
+#title_add_doctors {
+    width: 45%;
+    height: 60%;
+    margin-left: 20px;
+    float: left;
+}
+#title_add_nurse {
+    width: 45%;
+    height: 60%;
+    float: left;
+    margin-left: 60px;
+    text-align: right;
+    
+}
+#body_admin {
+    width: 600px;
+    min-height: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #4A98D4;
+    border-radius: 20px;
+    clear: both;
+    padding: 20px;
+    
+    
+    
+    
+}
+a.title_admin {
+    color: #23477E;
+    font-size: 19px;
+    
+}
+a.title_admin:hover {
+    color: #246871;
+    font-size: 19px;
+    
+}
+span.data_doctor {
+    color: #1D2944;
+    font-weight: bold;
+    
+    
+}
+span.sukces {
+    color: #185C13;
+    font-weight: bold;
+}
+span.kalendar {
+    color: white;
+    
+}
+a.button {
+    color: green;
+    background-color: white;
+    border-radius: 20px;
+    padding: 5px;
+    
+}
+div.title {
+    padding: 7px;
+    float:left;
+    
+    
+}
+#main {
+    border-radius: 25px;
+    background-color: rgba(0,0,255,0.6); 
+    width: 1000px;
+    min-height: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 16px;
+    padding-left: 150px;
+    padding-right: 150px;
+    
+}
+div.visit_doctor {
+    background-color: white;
+    min-height: 100px;
+    border-radius: 30px;
+    
+}
+span.title {
+    font-size: 18px;
+    color: #1B1B5C;
+    
+}
+span.error {
+    color: #AA0000;
+    font-weight: bold;
+    
+}
+div.doctor {
+    width: 20%;
+    
+}
+table.kalendar {
+
+    opacity: none;
+border-spacing: 1px;
+border-collapse: separate;
+width: 820px;
+height: 550px;
+
+
+    
+}
+div.cell {
+    background-color: #69AB43;
+    border-radius: 10px; 
+    height: 100%;
+    padding: 25px;
+    background-color: rgba(0,67,171,149.5);
+    
+}
+div.cell_active {
+    background-color: #34AB1C;
+    border-radius: 10px; 
+    height: 100%;
+    padding: 25px;
+    
+}
+span.active {
+    color: white;
+    
+}
+a.no_active {
+    color: #3CAB42;
+}
+a.no_active:hover {
+    color: yellow;
     
 }
