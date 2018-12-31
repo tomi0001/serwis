@@ -10,11 +10,14 @@
 <div id='main_admin'>
     <div id='title_admin'>
         <br>
-        <div id='title_add_doctors'>
+        <div id='title_add_doctor' class="admin_menu">
             <a class="title_admin" href="{{url('/admin/add_doctor')}}">Dodaj nowego lekarza</a>
         </div>
-        <div id='title_add_nurse'>
+        <div id='title_add_nurs' class="admin_menu">
             <a class="title_admin" href="{{url('/admin/add_nurse')}}">Dodaj nową pielęgniarkę</a>
+        </div>
+        <div id='title_add_settin' class="admin_menu">
+            <a class="title_admin" href="{{url('/admin/setting')}}">Ustawienia</a>
         </div>
     </div>
     

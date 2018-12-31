@@ -16,11 +16,9 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 class Controller_nurses extends BaseController
 {
-    public $hour_open;
-    public $hour_close;
-    public $minutes = array();
-    public $array_visit = array();
-    private $i = 0;
+
+    public $errors = array();
+    
     public function login_nurses() {
         $user = new \App\Http\Controllers\user();
         if ( !(Auth::check()) or !$user->check_if_what_admin_nurses_doctor(3) ) {
@@ -37,63 +35,93 @@ class Controller_nurses extends BaseController
         return redirect("/nurses/login")->with("sukces","Wylogowałeś się");
         
     }
-    private function check_doctor_minutes($hour_start,$hour_end) {
-        $doctor = new \App\Doctor();
-        $hour_start = date("H:i:s",$hour_start);
-        $hour_end = date("H:i:s",$hour_end);
-        $qestion_hour_open  = $doctor->where("hour_open","<=",$hour_start)->where("hour_close",">=",$hour_end)->get();
-        foreach ($qestion_hour_open as $qestion_hour_open2) {
-            if (!empty($this->array_visit['id'][$this->i])) {
-                $this->array_visit['id'][$this->i] .= "," . $qestion_hour_open2->id;
-            }
-            else {
-                $this->array_visit['id'][$this->i] =  $qestion_hour_open2->id;
-            }
-
-        }
-        
-        $this->array_visit['name'][$this->i] = $this->rename_id_at_name($this->array_visit['id'][$this->i]);
-        $this->array_visit['id'][$this->i] = explode(",",$this->array_visit['id'][$this->i]);
-        $this->i++;
-    }
-    private function rename_id_at_name($array_doctor) {
-        $doctor = new \App\Doctor();
-        $array = explode(",",$array_doctor);
-        $name3 = array();
-        for ($i=0;$i < count($array);$i++) {
-            $name  = $doctor->where("id","=",$array[$i])->get();
+    public function add_patients() {
+        $user = new \App\Http\Controllers\user();
+        if ( (Auth::check()) or $user->check_if_what_admin_nurses_doctor(3) ) {
+            return View("add_patients");
             
-            foreach ($name as $name2) {
-                $name3[$i] = $name2->name . " " . $name2->lastname;
+        }
+        
+    }
+    
+    
+    
+    public function add_patients_action() {
+        $int = (int) Input::get("nr");
+        if (Input::get("name") == "") {
+            array_push($this->errors,"Podaj imię pacjenta");
+        }
+        if (Input::get("lastname") == "") {
+            array_push($this->errors,"Podaj nazwisko pacjenta");
+        }
+        if (Input::get("pesel") == "") {
+            array_push($this->errors,"Podaj pesel pacjenta");
+        }
+        if (strlen(Input::get("pesel")) != 11) {
+            array_push($this->errors,"Pesel pacjenta musi się skaładać z 11 znaków");
+        }
+        if (Input::get("adress") == "") {
+            array_push($this->errors,"Podaj adres pacjenta");
+        }
+        if (Input::get("nr") == "") {
+            array_push($this->errors,"Podaj numer telefonu pacjenta");
+        }
+        if ($int == 0 or strstr(Input::get("nr"),".")) {
+            array_push($this->errors,"Numer telefonu musi być liczbą");
+        }
+        if (Input::get("date") == "") {
+            array_push($this->errors,"Podaj date urodzenia pacjenta");
+        }
+        if (Input::get("date") != "") {
+            $date = explode("-",Input::get("date"));
+            $datetime = mktime(0,0,0,$date[1],$date[2],$date[0]);
+            if ($datetime > time()) {
+                array_push($this->errors,"Data urodzenia pacjenta jest większa od terazniejszej daty");
             }
         }
-        
-        
-        return $name3;
-    }
-    private function set_array_hour_doctor($second_int) {
- 
-        //$array_doctor = array();
-
-        $explode_data_open  = explode(":",$this->hour_open);
-        $explode_data_close  = explode(":",$this->hour_close);
-        $data_open  = mktime($explode_data_open[0],$explode_data_open[1],$explode_data_open[2],date("m"),date("d"),date("Y"));
-        $data_close = mktime($explode_data_close[0],$explode_data_close[1],$explode_data_close[2],date("m"),date("d"),date("Y"));
-
-        for ($i=$data_open;$i < $data_close;$i+=$second_int) {
-            
-            $this->check_doctor_minutes($i,$i+$second_int);
-
+        if ($this->check_if_is_patient_pesel(Input::get("pesel"))) {
+            array_push($this->errors,"Już jest pacjent o takim peselu");
         }
-
+        if (Input::get("name") == "") {
+            array_push($this->errors,"Podaj imię pacjenta");
+        }
+        if (count($this->errors) != 0) {
+            return redirect("/nurses/add_patients")->with("errors",$this->errors)->withInput();
+        }
+        else {
+            $this->save_patients();
+            return redirect("/nurses/add_patients")->with("succes","Pomyslnie dodano pacjenta");
+        }
+    }
+    private function save_patients() {
+        $patients = new \App\Patient();
+        $patients->name = Input::get("name");
+        $patients->lastname = Input::get("lastname");
+        $patients->date_born = Input::get("date");
+        $patients->pesel = Input::get("pesel");
+        $patients->adress = Input::get("adress");
+        $patients->sex = Input::get("sex");
+        $patients->telefon_nr = Input::get("nr");
+        $patients->diseases = Input::get("diseases");
+        $patients->save();
+        
+    }
+    private function check_if_is_patient_pesel($pesel) {
+        $patients = new \App\Patient();
+        $check = $patients->where("pesel",$pesel)->get();
+        if (count($check) == 0) return false;
+        else return true;
         
         
     }
+
+
     public function nurses_main($year = "",$month = "",$day = "",$action = "") {
             
         $user = new \App\Http\Controllers\user();
         if ( (Auth::check()) or $user->check_if_what_admin_nurses_doctor(3) ) {
             $kalendar = new \App\Http\Controllers\kalendar();
+            $hours_of_reception = new \App\Http\Controllers\hours_of_reception();
             $kalendar->set_date($month,$action,$day,$year);
             $how_day_month = $kalendar->check_month($kalendar->month,$kalendar->year);
             $back_month = $kalendar->return_back_month($kalendar->month,$kalendar->year);
@@ -101,16 +129,13 @@ class Controller_nurses extends BaseController
             $text_month = $kalendar->return_month_text($kalendar->month);
             $next_year  = $kalendar->return_next_year($kalendar->year);
             $back_year  = $kalendar->return_back_year($kalendar->year);
-            $this->select_common_hour();
-            $this->set_minutes(60 * 30);
-            
-            $this->check_hour_closed();
-            //print $this->hour_open;
-            $this->set_array_hour_doctor(60 * 30);
-            print ("<pre>");
-            
-            print_r($this->array_visit);
-            print ("</pre>");
+            $hours_of_reception->select_common_hour();
+            $hours_of_reception->set_minutes(60 * $hours_of_reception->min);
+            $patients = $this->select_patients();
+            $hours_of_reception->check_hour_closed();
+            $hours_of_reception->set_array_hour_doctor(60 * $hours_of_reception->min);
+
+
             return view("main_nurses")
                     ->with("month",$kalendar->month)
                     ->with("year",$kalendar->year)
@@ -126,8 +151,10 @@ class Controller_nurses extends BaseController
                     ->with("day1",1)
                     ->with("day3",$kalendar->day)
                     ->with("day_week",$kalendar->day_week)
-                    ->with("array_doctor",$this->array_visit);
-            
+                    ->with("array_doctor",$hours_of_reception->array_visit)
+                    ->with("patients",$patients)
+                    ->with("date",$year . "-" . $month . "-" . $day . "?");
+           
         }
         else {
             
@@ -135,51 +162,14 @@ class Controller_nurses extends BaseController
         }
         
     }
-    public function set_minutes($minutes) {
-        $hour_open_tmp = explode(":",$this->hour_open);
-        $hour_close_tmp = explode(":",$this->hour_close);
-        print $this->hour_close;
-        $hour_open_tmp2 = mktime($hour_open_tmp[0],$hour_open_tmp[1],$hour_open_tmp[2],date("m"),date("d"),date("Y"));
-        $hour_close_tmp2 = mktime($hour_close_tmp[0],$hour_close_tmp[1],$hour_close_tmp[2],date("m"),date("d"),date("Y"));
-        $result = $hour_close_tmp2 - $hour_open_tmp2;
-        $result_minutes = $result / $minutes;
-        $j = 0;
-        for ($i=$hour_open_tmp2;$i < $hour_close_tmp2;$i+= $minutes) {
-            $this->array_visit['hour'][$j] = date("H:i:s",$i);
-            $j++;
-        }
-         
-         
-        
-    }
-    private function set_common_hour_for_doctors($minutes_for_1_visit) {
-        if ($this->hour_open == $this->hour_close) {
-            $common_time = 3600 * 24;
-        }
-        else {
-            $data_open  = date("Y-m-d") . " " . $this->hour_open;
-            $data_close = date("Y-m-d") . " " . $this->hour_close;
-            $common_time = time($data_close) - time($data_open);
-        }
-        $minutes_for_1_visit *= 60;
-        return (int) ($common_time / $minutes_for_1_visit);
-        
 
-    }
-    private function check_hour_closed() {
-        $close_hour = explode(":",$this->hour_close);
-        if ($close_hour[0] == "00") $this->hour_close = "23:59:00";
+    private function select_patients() {
+        $patients = new \App\Patient();
+        $select = $patients->all();
+        return $select;
         
     }
-    private function select_common_hour() {
-        $doctor = new \App\Doctor();
-        $hour_1 = $doctor->where("hour_open",">=","00:00:00")->orderBy("hour_open")->limit(1)->get();
-        $hour_2 = $doctor->where("hour_close","<=","23:59:00")->orderBy("hour_close","DESC")->limit(1)->get();
-        foreach ($hour_1 as $hour_11)  $this->hour_open =  $hour_11->hour_open;
-        foreach ($hour_2 as $hour_22)  $this->hour_close =  $hour_22->hour_close;
 
-        
-    }
     public function login_action() {
         $user = new \App\Http\Controllers\user();
         $nurses = array(

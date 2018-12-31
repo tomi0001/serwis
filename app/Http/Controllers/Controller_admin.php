@@ -47,6 +47,18 @@ class Controller_admin extends BaseController
         }
         
     }
+    
+    public function setting() {
+        $user = new \App\Http\Controllers\user();
+        $how_visit = App\Admin::all();
+        foreach ($how_visit as $how_visit2) {
+            $visit = $how_visit2->how_visit;
+        }
+        if ( (Auth::check()) and  $user->check_if_what_admin_nurses_doctor(1) == true ) {
+            return view("setting_admin")->with("visit",$visit);
+        }
+    }
+    
     public function login_admin() {
         $user = new \App\Http\Controllers\user();
         if ( !(Auth::check())   ) {
@@ -69,6 +81,8 @@ class Controller_admin extends BaseController
     public function register_action() {
         
         $user = new \App\Http\Controllers\user();
+        $hour = new \App\Http\Controllers\hours_of_reception();
+        $hour->check_minutes(Input::get("visit"));
         $admin = $this->check_if_admin();
         if (count($admin) == 0) {
             
@@ -87,6 +101,10 @@ class Controller_admin extends BaseController
             if (Input::get("password") == "") {
                 $bool = true;
                 array_push($this->errors,"Uzupełnij pole hasło");
+            }
+            if (count($hour->errors) != 0) {
+                $bool = true;
+                $this->errors = array_merge($this->errors, $hour->errors);
             }
             if ($bool == true)  {
                 return Redirect("/admin/register")->with("error",$this->errors);
@@ -146,8 +164,46 @@ class Controller_admin extends BaseController
     private function add_admin($id_user) {
         $admin = new \App\Admin;
         $admin->id_users = $id_user;
+        $admin->how_visit = Input::get("visit");
         $admin->save();
         
+    }
+    public function setting_doctor() {
+        $doctor = $this->select_dr();
+
+        return View("setting_doctor_admin")->with("doctor",$doctor);
+        
+    }
+    public function setting_doctor_id($id = "") {
+        $dr = $this->select_dr_id($id);
+        return View("setting_doctor_admin_id")->with("doctor",$dr);
+    }
+    private function select_dr_id($id) {
+        $doctor = new \App\Doctor();
+        $dr = $doctor->where("id","=",$id)->get();
+        $new_dr = array();
+        foreach ($dr as $dr2) {
+            $new_dr["hour_open"] = substr($dr2->hour_open,0,5);
+            $new_dr["hour_close"] = substr($dr2->hour_close,0,5);
+            $new_dr["telefon_nr"] = $dr2->telefon_nr;
+            
+        }
+        return $new_dr;
+        
+    }
+    private function select_dr() {
+        $doctor = new \App\Doctor();
+        $dr = $doctor->all();
+        $new_dr = array();
+        $i = 0;
+        foreach ($dr as $dr2) {
+            $new_dr["name"][$i] = $dr2->name;
+            $new_dr["lastname"][$i] = $dr2->lastname;
+            //$new_dr["hour_close"][$i] = $dr2->hour_close;
+            $i++;
+        }
+        //$user2 =
+        return $dr;
     }
     public function admin_main() {
         $user = new \App\Http\Controllers\user();
@@ -164,6 +220,7 @@ class Controller_admin extends BaseController
         
         
     }
+    
     public function add_nurse() {
         $user = new \App\Http\Controllers\user();
         if ($user->check_if_what_admin_nurses_doctor(1) == true and  (Auth::check())) {

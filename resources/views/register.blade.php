@@ -31,6 +31,14 @@
                     <input type="password" name="password_confirn" class="form-control">
                 </td>
             </tr>
+            <tr>
+                <td>
+                    <span class="login">Długość pojedyńczej wizity</span>
+                </td>
+                <td>
+                    <input type="text" name="visit" class="form-control">
+                </td>
+            </tr>
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
             <tr>
                 <td colspan="2">

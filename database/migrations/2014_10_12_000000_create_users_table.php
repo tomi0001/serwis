@@ -28,6 +28,16 @@ class CreateUsersTable extends Migration
             $table->string("adress");
             $table->unsignedTinyInteger("sex");
             $table->string("telefon_nr");
+            $table->text("diseases"); 
+        });
+        Schema::create("users",function (Blueprint $table) {
+            $table->engine = 'InnoDB';
+            $table->increments('id');
+            $table->string("login");
+            $table->string("password");
+            $table->integer("role");
+            $table->timestamps();
+            
         });
         Schema::create('doctors', function (Blueprint $table) {
             $table->engine = 'InnoDB';
@@ -47,8 +57,12 @@ class CreateUsersTable extends Migration
             $table->string("telefon_nr");
             $table->unsignedTinyInteger("type");
             $table->text("diseases");
+            $table->time("hour_open");
+            $table->time("hour_close");
+            $table->integer("id_users")->unsigned();
+            $table->foreign("id_users")->references("id")->on("users");
         });
-        
+
         Schema::create('patients_register', function (Blueprint $table) {
             $table->engine = 'InnoDB';
   //          $table->charset('utf8mb4');
@@ -65,7 +79,7 @@ class CreateUsersTable extends Migration
             $table->timestamps();
             
         });
-        Schema::create('visit', function (Blueprint $table) {
+        Schema::create('visits', function (Blueprint $table) {
             $table->engine = 'InnoDB';
   //          $table->charset('utf8mb4');
             //$table->collate('utf8mb4_unicode_ci'); 
@@ -82,7 +96,7 @@ class CreateUsersTable extends Migration
             $table->timestamps();
             
         });
-        Schema::create('admin', function (Blueprint $table) {
+        Schema::create('admins', function (Blueprint $table) {
             $table->engine = 'InnoDB';
   //          $table->charset('utf8mb4');
             //$table->collate('utf8mb4_unicode_ci'); 
@@ -92,6 +106,9 @@ class CreateUsersTable extends Migration
             
             //$table->timestamps();
             $table->string("password");
+            $table->integer("how_visit");
+            $table->integer("id_users")->unsigned();
+            $table->foreign("id_users")->references("id")->on("users");
             $table->timestamps();
             
         });
@@ -108,8 +125,9 @@ class CreateUsersTable extends Migration
     {
         Schema::dropIfExists('patients');
         Schema::dropIfExists('doctors');
-        Schema::dropIfExists('visit');
-        Schema::dropIfExists('admin');
+        Schema::dropIfExists('visits');
+        Schema::dropIfExists('admins');
+        Schema::dropIfExists('users');
 
         
     }

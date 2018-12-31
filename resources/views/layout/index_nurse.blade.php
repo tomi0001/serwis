@@ -11,15 +11,16 @@
     <div id='title_admin'>
         <br>
         <div class='title'>
-            <a class="title_admin" href="{{url('/admin/add_doctor')}}">Dodaj nowego lekarza</a>
+            <a class="title_admin" href="{{url('/nurses/add_patients')}}">Dodaj nowego Pacjenta</a>
         </div>
         <div class='title'>
-            <a class="title_admin" href="{{url('/admin/add_nurse')}}">Dodaj nową pielęgniarkę</a>
+            <a class="title_admin" href="{{url('/nurses/main')}}">Kalendarz</a>
         </div>
         <div class='title'>
             <a class="title_admin" href="{{url('/nurses/logout')}}">Wyloguj się</a>
         </div>
     </div>
+    
     @include ('layout.kalendar')
     
 </div>

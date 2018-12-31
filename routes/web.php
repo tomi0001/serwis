@@ -22,9 +22,17 @@ Route::post("/admin/add_doctor_form/{type?}","Controller_admin@add_nurse_or_doct
 Route::post("/admin/add_nurse_form/{type?}","Controller_admin@add_nurse_or_doctor_form");
 Route::get("/admin/sukces","Controller_admin@sukces");
 Route::get("/admin/add_nurse","Controller_admin@add_nurse");
+Route::get("/admin/setting","Controller_admin@setting");
+Route::get("/admin/setting_doctor","Controller_admin@setting_doctor");
+Route::get("/admin/setting_doctor/{id?}","Controller_admin@setting_doctor_id");
 
 Route::get("/nurses/login","Controller_nurses@login_nurses");
 Route::post("/nurses/login_action","Controller_nurses@login_action");
 Route::get("/nurses/main/{year?}/{month?}/{day?}/{action?}","Controller_nurses@nurses_main");
-
 Route::get("/nurses/logout","Controller_nurses@logout_action");
+Route::get("/nurses/add_patients","Controller_nurses@add_patients");
+Route::get("/nurses/add_patients_action","Controller_nurses@add_patients_action");
+
+
+Route::get("/ajax_nurser/register_to_doctor","Controller_ajax_nurses@register_to_doctor");
+Route::get("/ajax_admin/modyfik_setting","Controller_ajax_admin@modyfik_setting");
