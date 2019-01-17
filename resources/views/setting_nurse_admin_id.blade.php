@@ -70,42 +70,10 @@
             
             
         </tr>
-        <tr>
-            <td>
-                <span class="kalendar">Godzina otwarcia</span>
-                
-            </td>
-            <td width="70%">
-                <input type="text" id="hour_open" class="form-control" value="{{$doctor["hour_open"]}}">
-            </td>
-            
-            
-        </tr> 
-        <tr>
-            <td>
-                <span class="kalendar">Godzina zamknięcia</span>
-                
-            </td>
-            <td width="70%">
-                <input type="text" id="hour_close" class="form-control" value="{{$doctor["hour_close"]}}">
-            </td>
-            
-            
-        </tr> 
-        <tr>
-            <td>
-                <span class="kalendar">Nr telefonu</span>
-                
-            </td>
-            <td width="70%">
-                <input type="text" id="nr" class="form-control" value="{{$doctor["telefon_nr"]}}">
-            </td>
-            
-            
-        </tr> 
+
         <tr>
             <td width="100%" colspan="2" class="center">
-                <input type='button' class="btn btn-primary" onclick="modyfik_doctor_id('{{ url('/admin/modyfik_doctor_id')}}','{{$doctor['id']}}')" value='Modyfikuj'>
+                <input type='button' class="btn btn-primary" onclick="modyfik_doctor_id('{{ url('/admin/modyfik_nurse_id')}}','{{$doctor['id']}}')" value='Modyfikuj'>
             </td>
             
             

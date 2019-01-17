@@ -64,6 +64,12 @@ class user extends BaseController
        
         
     }
+    public function edition_user($id) {
+           $user = new \App\User;
+           $password = Hash::make(Input::get("password"));
+           $user->where("id","=",$id)
+                ->update(["password"=>$password]);
+    }
     
     public function add_user($role) {
         $user = new \App\User;

@@ -16,7 +16,7 @@
 	  <tbody>
 
 
-  @for ($rows=0; $day2 <= $how_day_month;$rows++) 
+  @while ( $day2 <= $how_day_month) 
 
     <tr height=70>
     
@@ -56,7 +56,7 @@
     @endfor
     </tr>
 
-  @endfor
+  @endwhile
   <tr>
 
 </table>

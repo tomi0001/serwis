@@ -29,11 +29,19 @@ class hours_of_reception extends BaseController
     private $i = 0;
     public $hour_open;
     public $hour_close;
-    public $min = 60;
+    public $min;
     public $minutes = array();
     public $array_visit = array();
     public $errors = array();
-    public function check_doctor_minutes($hour_start,$hour_end) {
+    function __construct() {
+        $admin = new \App\Admin();
+        $adm = $admin->all();
+        foreach ($adm as $adm2) {
+            $this->min = $adm2->how_visit;
+        }
+        
+    }
+    public function check_doctor_minutes(string $hour_start,string $hour_end) {
         $doctor = new \App\Doctor();
         $hour_start2 = date("H:i:s",$hour_start);
         $hour_end2 = date("H:i:s",$hour_end);
@@ -56,7 +64,7 @@ class hours_of_reception extends BaseController
         $this->i++;
     }
     
-    public function rename_id_at_name($array_doctor) {
+    public function rename_id_at_name(string $array_doctor) {
         $doctor = new \App\Doctor();
         $array = explode(",",$array_doctor);
         $name3 = array();
@@ -72,21 +80,21 @@ class hours_of_reception extends BaseController
         return $name3;
     }
     
-    public function rename_hour_at_int($date) {
+    public function rename_hour_at_int(string $date) {
         $date2 = explode(" ",$date);
         $day = explode("-",$date2[0]);
         $hour = explode(":",$date2[1]);
         return mktime($hour[0],$hour[1],$hour[2],$day[1],$day[2],$day[0]);
         
     }
-    public function check_minutes($minutes) {
+    public function check_minutes(string $minutes) {
         if (!is_numeric($minutes) or strstr($minutes, ".")) array_push($this->errors, "Liczba nie jest liczbą całkowitą");
         if ($minutes < 5 or $minutes > 240) array_push($this->errors, "Liczba minut musi się mieścić w zakresie od 5 do 240 minut");
         
     }
     
     
-    public function set_array_hour_doctor($second_int) {
+    public function set_array_hour_doctor(int $second_int) {
         $doctor = new \App\Doctor();
 
         $explode_data_open  = explode(":",$this->hour_open);
@@ -112,7 +120,7 @@ class hours_of_reception extends BaseController
         
     }
 
-    public function set_minutes($minutes) {
+    public function set_minutes(int $minutes) {
         $doctor = new \App\Doctor();
         $hour_open_tmp = explode(":",$this->hour_open);
         $hour_close_tmp = explode(":",$this->hour_close);
@@ -138,7 +146,19 @@ class hours_of_reception extends BaseController
          
         
     }
-    public function set_common_hour_for_doctors($minutes_for_1_visit) {
+    public function compare_hour(string $hour_open,string $hour_close) {
+        $hour_open_explode = explode(":",$hour_open);
+        $hour_close_explode = explode(":",$hour_close);
+        if ($hour_open_explode[0] < $hour_close_explode[0]) return true;
+        elseif ($hour_open_explode[0] == $hour_close_explode[0]) {
+            if ($hour_open_explode[1] < $hour_close_explode[1]) return true;
+            else return false;
+            
+        }
+        else return false;
+        
+    }
+    public function set_common_hour_for_doctors(int $minutes_for_1_visit) {
         if ($this->hour_open == $this->hour_close) {
             $common_time = 3600 * 24;
         }

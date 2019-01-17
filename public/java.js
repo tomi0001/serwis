@@ -26,3 +26,58 @@ function modyfik_setting(url) {
     $("#modyfik_setting").load(url + "?visit=" + visit);
     
 }
+
+function modyfik_doctor_id(url,id) {
+    var password = $("#password").val();
+    var password_new = $("#password_confirm").val();
+    var hour_open = $("#hour_open").val();
+    var hour_close = $("#hour_close").val();
+    var telefon_nr = $("#nr").val();
+    $("#result").load(url + "?password=" + password + "&password_new=" + password_new + "&hour_open=" + hour_open + "&hour_close=" + hour_close + "&id=" + id + "&telefon_nr=" + telefon_nr);
+}
+
+function delete_visit(url,id) {
+    var window = confirm("Czy na pewno usunąć");
+    if (window == true) {
+        //alert(id);
+        $("#list_"+id).load(url+"?id=" + id);
+        
+    }
+
+    
+    
+}
+var i;
+var bool = true;
+function delete_drugs(nazwa) {
+    var f = $("<tr>");
+    $(f).remove();
+    //if(nazwa=document.getElementById(nazwa))nazwa.parentNode.removeChild(nazwa)
+    
+    
+}
+function add_drugs() {
+        //if (bool == true) {
+          //  $(".drug").append("<tr class=\"drugs\" ><td width=\"30%\"><input type=\"text\" name=drugs1[" + i + "] class=\"form-control\"></td><td width=\"10%\"><input type=\"text\" name=\"drugs2["+ i + "]\" class=\"form-control\"></td><td width=\"10%\"><input type=\"text\" name=\"drugs3["+ i + "]\" class=\"form-control\"></td><td width=\"10%\"><input type=\"text\" name=\"drugs4["+ i + "]\" class=\"form-control\"></td><td width=\"10%\"><input type=\"text\" name=\"drugs5["+ i + "]\" class=\"form-control\"></td><td width=\"10%\"><input type=\"text\" name=\"drugs6["+ i + "]\" class=\"form-control\"></td><td width=\"10%\"><input type=\"text\" name=\"drugs7["+ i + "]\" class=\"form-control\"></tr>");
+        //}
+        //else {
+          //  i++;
+            
+            //$("#hide_tr").show();
+            $("#drugss .drugs:first").clone().appendTo($("#drugss"));
+            //$bool = false;onclick="delete_drugs('f')"  id = 'f'
+        //}
+        
+}
+function delete_drugs() {
+    
+       $(document).on('click', '.drugsss', function() {
+           $(this).parents('.drugs').remove();
+       });
+    
+    }
+function save_visit(url) {
+    alert($( "form" ).serialize());
+    $("#ajax").load(url + "?" + $( "form" ).serialize());
+    
+}

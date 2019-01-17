@@ -61,19 +61,13 @@ class Controller_admin extends BaseController
     
     public function login_admin() {
         $user = new \App\Http\Controllers\user();
-        if ( !(Auth::check())   ) {
-            return View("login_admin");
-        }
-        else if (Auth::check() and  ($user->check_if_what_admin_nurses_doctor(2) == true ) ) {
-            
-            return redirect("/admin");
-        }
-        else if (Auth::check() and  $user->check_if_what_admin_nurses_doctor(3) == true) {
-            return redirect("/nurses/main");
-            
+        
+        if (Auth::check() and  ($user->check_if_what_admin_nurses_doctor(1) == true ) ) {
+            return redirect("/admin/main");
+         
         }
         else {
-            return redirect("/admin/main");
+            return View("login_admin");
         }
         
     }
@@ -161,7 +155,7 @@ class Controller_admin extends BaseController
         }
         
     }
-    private function add_admin($id_user) {
+    private function add_admin(int $id_user) {
         $admin = new \App\Admin;
         $admin->id_users = $id_user;
         $admin->how_visit = Input::get("visit");
@@ -174,40 +168,64 @@ class Controller_admin extends BaseController
         return View("setting_doctor_admin")->with("doctor",$doctor);
         
     }
-    public function setting_doctor_id($id = "") {
+    public function setting_nurses() {
+        $nurse = $this->select_nurses();
+        return View("setting_nurse_admin")->with("nurse",$nurse);
+    }
+    public function setting_doctor_id(int $id) {
         $dr = $this->select_dr_id($id);
         return View("setting_doctor_admin_id")->with("doctor",$dr);
     }
-    private function select_dr_id($id) {
+    public function setting_nurse_id(int $id) {
+        $dr = $this->select_nr_id($id);
+        return View("setting_nurse_admin_id")->with("doctor",$dr);
+        
+    }
+    
+    private function select_nr_id(int $id) {
+        $nurse = new \App\Nurse();
+        $nr = $nurse->where("id","=",$id)->get();
+        $new_nr = array();
+        foreach ($nr as $nr2) {
+            $new_nr["name"] = $nr2->name;
+            $new_nr["lastname"] = $nr2->lastname;
+            $new_nr["id"] = $nr2->id_users;
+        }
+        return $new_nr;
+        
+    }
+    
+    private function select_dr_id(int $id) {
         $doctor = new \App\Doctor();
         $dr = $doctor->where("id","=",$id)->get();
         $new_dr = array();
         foreach ($dr as $dr2) {
+            $new_dr["name"] = $dr2->name;
+            $new_dr["lastname"] = $dr2->lastname;
             $new_dr["hour_open"] = substr($dr2->hour_open,0,5);
             $new_dr["hour_close"] = substr($dr2->hour_close,0,5);
             $new_dr["telefon_nr"] = $dr2->telefon_nr;
-            
+            $new_dr["id"] = $dr2->id_users;
         }
         return $new_dr;
         
     }
+
     private function select_dr() {
         $doctor = new \App\Doctor();
         $dr = $doctor->all();
-        $new_dr = array();
-        $i = 0;
-        foreach ($dr as $dr2) {
-            $new_dr["name"][$i] = $dr2->name;
-            $new_dr["lastname"][$i] = $dr2->lastname;
-            //$new_dr["hour_close"][$i] = $dr2->hour_close;
-            $i++;
-        }
-        //$user2 =
+
         return $dr;
+    }
+    private function select_nurses() {
+        $nurse = new \App\Nurse();
+        $nr = $nurse->all();
+      
+        return $nr;
     }
     public function admin_main() {
         $user = new \App\Http\Controllers\user();
-        if ($user->check_if_what_admin_nurses_doctor(1) == true and  (Auth::check())) {
+        if (   Auth::check() and  $user->check_if_what_admin_nurses_doctor(1) ) {
             return View("main_admin");
         }
         else {
@@ -215,11 +233,7 @@ class Controller_admin extends BaseController
             
         }
     }
-    private function check_flap_for_doctor() {
-        
-        
-        
-    }
+
     
     public function add_nurse() {
         $user = new \App\Http\Controllers\user();
@@ -274,18 +288,32 @@ class Controller_admin extends BaseController
         }       
         
     }
-    private function check_hour_doctor($hour,$nr) {
+    
+    public function logout_action() {
+        Auth()->logout();
+        return redirect("/admin/login")->with("sukces","Wylogowałeś się");
+        
+    }
+    public function check_hour_doctor($hour,int $nr) {
         //$error = array();
         $i = 0;
-        if (strlen($hour) != 5) {
+        $bool = false;
+        if ($len = strlen($hour) != 5) {
             //$error[$i] = "Godzina $nr musi się skałdać z 5 znaków";
-            array_push($this->errors,"Godzina $nr musi się skałdać z 5 znaków");
+            array_push($this->errors,"Godzina $nr musi się składać z 5 znaków");
           //  $i++;
         }
-        if (substr_count($hour,":") != 1) {
+        if ($sub = substr_count($hour,":") != 1) {
             //$error[$i] = "Godziny $nr nie są poprzedzone znakiem :";
             array_push($this->errors,"Godziny $nr nie są poprzedzone znakiem :");
             //$i++;
+        }
+        if ($sub != 1 ) {
+            
+            $division = explode(":",$hour);
+             if (!preg_match ('/^[0-9]+$/', $division[0])) $bool = true;
+             if (!preg_match ('/^[0-9]+$/', $division[1])) $bool = true;
+             if ($bool == true) array_push ($this->errors, "Godzina $nr musi być wartością numeryczną");
         }
         //return $error;
     }
@@ -295,9 +323,13 @@ class Controller_admin extends BaseController
             
             return view("sukces_admin");
         }
+        else {
+             return Redirect('/admin/login');
+            
+        }  
         
     }
-    private function save_doctor($id_users) {
+    private function save_doctor(int $id_users) {
 
         
         $doctor = new \App\Doctor;
@@ -312,7 +344,7 @@ class Controller_admin extends BaseController
         $doctor->save();
         
     }
-    private function save_nurse($id_users) {
+    private function save_nurse(int $id_users) {
 
         
         $nurse = new \App\Nurse;

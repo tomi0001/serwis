@@ -18,7 +18,9 @@ class Controller_nurses extends BaseController
 {
 
     public $errors = array();
-    
+    public $page_back;
+    public $page_next;
+    public $page = 10;
     public function login_nurses() {
         $user = new \App\Http\Controllers\user();
         if ( !(Auth::check()) or !$user->check_if_what_admin_nurses_doctor(3) ) {
@@ -37,9 +39,13 @@ class Controller_nurses extends BaseController
     }
     public function add_patients() {
         $user = new \App\Http\Controllers\user();
-        if ( (Auth::check()) or $user->check_if_what_admin_nurses_doctor(3) ) {
+        if ( (Auth::check()) and $user->check_if_what_admin_nurses_doctor(3) ) {
             return View("add_patients");
             
+        }
+        else {
+            
+            return Redirect('/nurses/login')->with('error','Wylogowałeś się');
         }
         
     }
@@ -119,7 +125,7 @@ class Controller_nurses extends BaseController
     public function nurses_main($year = "",$month = "",$day = "",$action = "") {
             
         $user = new \App\Http\Controllers\user();
-        if ( (Auth::check()) or $user->check_if_what_admin_nurses_doctor(3) ) {
+        if ( (Auth::check()) and $user->check_if_what_admin_nurses_doctor(3) ) {
             $kalendar = new \App\Http\Controllers\kalendar();
             $hours_of_reception = new \App\Http\Controllers\hours_of_reception();
             $kalendar->set_date($month,$action,$day,$year);
@@ -134,7 +140,6 @@ class Controller_nurses extends BaseController
             $patients = $this->select_patients();
             $hours_of_reception->check_hour_closed();
             $hours_of_reception->set_array_hour_doctor(60 * $hours_of_reception->min);
-
 
             return view("main_nurses")
                     ->with("month",$kalendar->month)
@@ -153,7 +158,7 @@ class Controller_nurses extends BaseController
                     ->with("day_week",$kalendar->day_week)
                     ->with("array_doctor",$hours_of_reception->array_visit)
                     ->with("patients",$patients)
-                    ->with("date",$year . "-" . $month . "-" . $day . "?");
+                    ->with("date",$kalendar->year . "-" . $kalendar->month . "-" . $kalendar->day . "?");
            
         }
         else {
@@ -162,7 +167,73 @@ class Controller_nurses extends BaseController
         }
         
     }
+    public function patients_list() {
+        $user = new \App\Http\Controllers\user();
+        if ( (Auth::check()) and $user->check_if_what_admin_nurses_doctor(3) ) {
 
+            $list_patients = $this->select_patients_search(Input::get("name"),Input::get("lastname"),Input::get("date_born"),Input::get("sort"));
+            return View("list_patients_nurse")->with("list_patients",$list_patients)
+                    ->with("name",Input::get("name"))
+                    ->with("lastname",Input::get("lastname"))
+                    ->with("date_born",Input::get("date_born"));
+        }
+        else {
+            
+            return Redirect('/nurses/login')->with('error','Wylogowałeś się');
+        }
+    }
+    private function select_patients_search( $name,$lastname, $date_born,$sort) {
+        $patients = \App\Patient::query();
+        if ($name != "") {
+            $patients->where('name',"LIKE","%{$name}%");
+        }
+        if ($lastname != "") {
+            $patients->where('lastname',"LIKE","%{$lastname}%");
+        }
+        if ($date_born != "") {
+            $patients->where("date_born","LIKE","%{$date_born}%");
+        }
+        if ($sort != "" and ($sort == "name" or $sort == "lastname" or $sort == "pesel" or $sort == "date_born" or $sort == "adress" or $sort == "telefon_nr")) {
+            $patients->orderBy($sort,"desc");
+        }
+
+        
+        $list = $patients->paginate($this->page);
+        //$list = $patients->withPath('custom/url');
+        return $list;
+    }
+    public function patients_list_id(int $id) {
+        $user = new \App\Http\Controllers\user();
+        if ( (Auth::check()) and $user->check_if_what_admin_nurses_doctor(3) ) {
+            $list_patients = $this->select_visit_patients($id);
+            return View("list_patients_nurse_id")->with("list",$list_patients)
+                    ->with("id",$id);
+        }
+        else {
+            
+            return Redirect('/nurses/login')->with('error','Wylogowałeś się');
+        }
+    }
+    private function select_visit_patients(int $id) {
+        $patients =  \App\Patients_register::query();
+        $patients->selectRaw("patients.name as name_p")
+                ->selectRaw("patients.lastname as lastname_p")
+                ->selectRaw("doctors.name as name_d")
+                ->selectRaw("doctors.lastname as lastname_d")
+                ->selectRaw("patients_registers.date as date")
+                ->selectRaw("patients_registers.if_visit as visit")
+                ->selectRaw("patients_registers.id as id")
+                ->join("patients","patients_registers.patients_id","=","patients.id")
+                ->join("doctors","patients_registers.doctors_id","=","doctors.id")
+                ->where("patients_id",$id);
+        if (Input::get('sort') == "name_p" or Input::get('sort') == "lastname_p" or Input::get('sort') == "name_d" or Input::get('sort') == "lastname_d" or Input::get('sort') == "date" or Input::get('sort') == "visit") {
+               $patients->orderBy(Input::get('sort'),"desc");
+        }
+                $list = $patients->paginate($this->page);
+                //var_dump($list);
+        
+        return $list;
+    }
     private function select_patients() {
         $patients = new \App\Patient();
         $select = $patients->all();

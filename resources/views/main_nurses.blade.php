@@ -38,6 +38,7 @@
                 
             </div>
                 <div class='down_nurses'>
+                 
                     <input type='button' value='zarejestrój' class='btn btn-primary' onclick="register_patients({{$i}},'{{$date}}{{$array_doctor['hour'][$i]}}','{{url('/ajax_nurser/register_to_doctor')}}')"><br>
                     <div id='register_to_doctor_{{$i}}'>
                     </div>

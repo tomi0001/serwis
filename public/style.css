@@ -69,7 +69,7 @@ body {
 div.admin_menu {
     float: left;
     padding: 10px;
-    padding-left: 12%;
+    padding-left: 8%;
     
 }
 span.login {
@@ -81,6 +81,12 @@ span.login {
 td.center {
     
     text-align: center;
+    
+}
+span.name {
+    color: white;
+    font-weight: bold;
+    
 }
 div.body {
     clear: both;
@@ -116,6 +122,30 @@ div.body {
     
     
     
+    
+}
+#body_patients {
+    width: 900px;
+    min-height: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #4A98D4;
+    border-radius: 20px;
+    clear: both;
+    padding: 20px;
+    
+    
+    
+    
+}
+#hide_tr {
+    display: none;
+    
+    
+}
+tr.drugs {
+    color: #0B2D61;
+    text-align: center;
     
 }
 a.title_admin {
@@ -162,6 +192,13 @@ td.patients {
     
     text-align: center;
     color: white;
+    font-weight: bold;
+}
+td.patients_list {
+    
+    text-align: center;
+    color: white;
+  
 }
 div.right_nurses {
     width: 50%;
@@ -188,6 +225,15 @@ div.title {
     float:left;
     
     
+}
+div.center {
+    text-align: center;
+    color: white;
+    width: 20%;
+    font-size: 19px;
+    margin-left: auto;
+    margin-right: auto;
+   
 }
 table.center {
     text-align: center;

@@ -10,13 +10,16 @@
 <div id='main_admin'>
     <div id='title_admin'>
         <br>
-        <div class='title'>
+        <div class='admin_menu'>
             <a class="title_admin" href="{{url('/nurses/add_patients')}}">Dodaj nowego Pacjenta</a>
         </div>
-        <div class='title'>
+        <div class='admin_menu'>
             <a class="title_admin" href="{{url('/nurses/main')}}">Kalendarz</a>
         </div>
-        <div class='title'>
+        <div class='admin_menu'>
+            <a class="title_admin" href="{{url('/nurses/patients_list')}}">Lista pacjentów</a>
+        </div>
+        <div class='admin_menu'>
             <a class="title_admin" href="{{url('/nurses/logout')}}">Wyloguj się</a>
         </div>
     </div>

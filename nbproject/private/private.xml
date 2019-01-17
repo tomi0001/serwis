@@ -3,44 +3,66 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/var/www/html/przychodnia/app/Http/Controllers/hours_of_reception.php</file>
             <file>file:/var/www/html/przychodnia/app/message.php</file>
-            <file>file:/var/www/html/przychodnia/app/Http/Controllers/Controller_common.php</file>
+            <file>file:/var/www/html/przychodnia/resources/views/list_patients_nurse_id.blade.php</file>
             <file>file:/var/www/html/przychodnia/resources/views/layout/index_register.blade.php</file>
             <file>file:/var/www/html/przychodnia/app/Http/Controllers/Controller_ajax_nurses.php</file>
-            <file>file:/var/www/html/przychodnia/app/Admin.php</file>
+            <file>file:/var/www/html/przychodnia/app/Http/Controllers/Controller_doctor.php</file>
             <file>file:/var/www/html/przychodnia/resources/views/main_admin_add_nurse.blade.php</file>
-            <file>file:/var/www/html/przychodnia/resources/views/layout/index_admin.blade.php</file>
             <file>file:/var/www/html/przychodnia/config/database.php</file>
             <file>file:/var/www/html/przychodnia/config/auth.php</file>
+            <file>file:/var/www/html/przychodnia/resources/views/layout/index_doctor.blade.php</file>
+            <file>file:/var/www/html/przychodnia/resources/views/sukces_admin.blade.php</file>
+            <file>file:/var/www/html/przychodnia/resources/views/ajax_sukces.blade.php</file>
+            <file>file:/var/www/html/przychodnia/resources/views/layout/index.blade.php</file>
+            <file>file:/var/www/html/przychodnia/resources/views/setting_admin.blade.php</file>
+            <file>file:/var/www/html/przychodnia/app/statistic.php</file>
+            <file>file:/var/www/html/przychodnia/resources/views/register.blade.php</file>
+            <file>file:/var/www/html/przychodnia/resources/views/main_nurses.blade.php</file>
+            <file>file:/var/www/html/przychodnia/app/Http/Controllers/Controller_ajax_doctor.php</file>
+            <file>file:/var/www/html/przychodnia/resources/views/login_admin.blade.php</file>
+            <file>file:/var/www/html/przychodnia/app/Http/Controllers/Controller_admin.php</file>
+            <file>file:/var/www/html/przychodnia/app/Http/Controllers/Controller_nurses.php</file>
+            <file>file:/var/www/html/przychodnia/resources/views/patients_register_visit.blade.php</file>
+            <file>file:/var/www/html/przychodnia/app/Http/Controllers/Controller_ajax_admin.php</file>
+            <file>file:/var/www/html/przychodnia/public/style.css</file>
+            <file>file:/var/www/html/przychodnia/resources/views/ajax_error.blade.php</file>
+            <file>file:/var/www/html/przychodnia/resources/views/setting_doctor_admin.blade.php</file>
+            <file>file:/var/www/html/przychodnia/app/Http/Controllers/kalendar.php</file>
+            <file>file:/var/www/html/przychodnia/app/Nurse.php</file>
+            <file>file:/var/www/html/przychodnia/.env</file>
+            <file>file:/var/www/html/przychodnia/app/Http/Controllers/hours_of_reception.php</file>
+            <file>file:/var/www/html/przychodnia/app/Http/Controllers/Controller_common.php</file>
+            <file>file:/var/www/html/przychodnia/app/Nurses.php</file>
+            <file>file:/var/www/html/przychodnia/app/Patients_register.php</file>
+            <file>file:/var/www/html/przychodnia/app/patients_register.php</file>
+            <file>file:/var/www/html/przychodnia/app/Admin.php</file>
+            <file>file:/var/www/html/przychodnia/resources/views/layout/index_admin.blade.php</file>
+            <file>file:/var/www/html/przychodnia/resources/views/ajax_error_array.blade.php</file>
             <file>file:/var/www/html/przychodnia/resources/views/layout/index_nurse.blade.php</file>
             <file>file:/var/www/html/przychodnia/resources/views/main_admin_add_doctor.blade.php</file>
             <file>file:/var/www/html/przychodnia/database/migrations/2014_10_12_100000_create_password_resets_table.php</file>
-            <file>file:/var/www/html/przychodnia/resources/views/sukces_admin.blade.php</file>
+            <file>file:/var/www/html/przychodnia/resources/views/setting_doctor_admin_id.blade.php</file>
+            <file>file:/var/www/html/przychodnia/resources/views/setting_nurse_admin_id.blade.php</file>
             <file>file:/var/www/html/przychodnia/config/app.php</file>
-            <file>file:/var/www/html/przychodnia/resources/views/layout/index.blade.php</file>
             <file>file:/var/www/html/przychodnia/resources/views/add_patients.blade.php</file>
-            <file>file:/var/www/html/przychodnia/app/statistic.php</file>
-            <file>file:/var/www/html/przychodnia/resources/views/register.blade.php</file>
+            <file>file:/var/www/html/przychodnia/resources/views/visit_patients_id.blade.php</file>
             <file>file:/var/www/html/przychodnia/public/java.js</file>
             <file>file:/var/www/html/przychodnia/resources/views/login_nurses.blade.php</file>
-            <file>file:/var/www/html/przychodnia/resources/views/main_nurses.blade.php</file>
             <file>file:/var/www/html/przychodnia/app/Doctor.php</file>
-            <file>file:/var/www/html/przychodnia/resources/views/login_admin.blade.php</file>
+            <file>file:/var/www/html/przychodnia/resources/views/new_visit_doctor.blade.php</file>
+            <file>file:/var/www/html/przychodnia/resources/views/list_patients_nurse.blade.php</file>
             <file>file:/var/www/html/przychodnia/resources/views/main_admin.blade.php</file>
-            <file>file:/var/www/html/przychodnia/app/Http/Controllers/Controller_admin.php</file>
+            <file>file:/var/www/html/przychodnia/resources/views/setting_nurse_admin.blade.php</file>
             <file>file:/var/www/html/przychodnia/database/migrations/2014_10_12_000000_create_users_table.php</file>
-            <file>file:/var/www/html/przychodnia/app/Http/Controllers/Controller_nurses.php</file>
             <file>file:/var/www/html/przychodnia/app/Http/Controllers/user.php</file>
             <file>file:/var/www/html/przychodnia/resources/views/layout/kalendar.blade.php</file>
             <file>file:/var/www/html/przychodnia/app/User.php</file>
-            <file>file:/var/www/html/przychodnia/public/style.css</file>
-            <file>file:/var/www/html/przychodnia/app/Http/Controllers/kalendar.php</file>
-            <file>file:/var/www/html/przychodnia/app/Nurse.php</file>
+            <file>file:/var/www/html/przychodnia/routes/console.php</file>
+            <file>file:/var/www/html/przychodnia/resources/views/login_doctor.blade.php</file>
             <file>file:/var/www/html/przychodnia/resources/views/register_admin.blade.php</file>
             <file>file:/var/www/html/przychodnia/app/Patient.php</file>
             <file>file:/var/www/html/przychodnia/routes/web.php</file>
-            <file>file:/var/www/html/przychodnia/.env</file>
         </group>
     </open-files>
 </project-private>
