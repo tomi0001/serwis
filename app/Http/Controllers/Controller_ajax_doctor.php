@@ -1,5 +1,8 @@
 <?php
-
+/*
+ * Autor Tomasz Leszczyński - tomi0001@gmail.com 2019
+ * Wszelkie prawa zastrzeżone 
+ */
 namespace App\Http\Controllers;
 
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -19,47 +22,67 @@ class Controller_ajax_doctor extends BaseController
     public $error = false;
     public $visit_text = false;
     public function save_visit() {
+        $user = new \App\Http\Controllers\user();
+        if ( (Auth::check()) and $user->check_if_what_admin_nurses_doctor(2) ) {
             
             if ($this->check_correctness_field(Input::get("drugs1")) == false) {
                 $this->error = true;
             }
-            if ($this->check_correctness_field(Input::get("drugs2")) == false) {
+            if ($this->check_correctness_field(Input::get("drugs2")) == false or $this->if_is_number(Input::get("drugs2")) == false) {
                 $this->error = true;
             }
-            if ($this->check_correctness_field(Input::get("drugs3")) == false) {
+            if ($this->check_correctness_field(Input::get("drugs3")) == false or $this->if_is_number(Input::get("drugs3")) == false) {
                 $this->error = true;
             }
-            if ($this->check_correctness_field(Input::get("drugs4")) == false) {
+            if ($this->check_correctness_field(Input::get("drugs4")) == false or $this->if_is_number(Input::get("drugs4")) == false) {
                 $this->error = true;
             }
-            if ($this->check_correctness_field(Input::get("drugs5")) == false) {
+            if ($this->check_correctness_field(Input::get("drugs5")) == false or $this->if_is_number(Input::get("drugs5")) == false) {
                 $this->error = true;
             }
-            if ($this->check_correctness_field(Input::get("drugs6")) == false) {
+            if ($this->check_correctness_field(Input::get("drugs6")) == false or $this->if_is_number(Input::get("drugs6")) == false) {
                 $this->error = true;
             }
-            if ($this->check_correctness_field(Input::get("drugs7")) == false) {
+            if ($this->check_correctness_field(Input::get("drugs7")) == false or $this->if_is_number_int(Input::get("drugs7")) == false) {
                 $this->error = true;
             }
             if (Input::get("visit_text") == "") $this->visit_text = true;
             
-            if ($this->error == true or $this->visit_text == true) return View("ajax_error")->with("error","Uzupełnij pola");
+            if (($this->error == true or $this->visit_text == true ) ) return View("ajax_error")->with("error","Uzupełnij pola");
             else {
-                $field = $this->implode_field();
                 $count = $this->check_if_good_id_patients(Input::get("patient_id"),Input::get("doctor_id"));
                 if ($count == true) {
-                    print "sd";
-                   $visit_id =  $this->save_field($field);
+                   $visit_id =  $this->save_field();
                    $this->save_drugs($visit_id);
                    $this->set_up_visit($visit_id);
                    $this->update_diseases(Input::get("patient_id"));
+                   return View("ajax_sukces")->with("sukces","Dodano pomyslnie");
                    
                 }
-                else print "d";
+                else return View("ajax_error")->with("error","Coś poszło nie tak");
                 
             }
             
+        }
         
+    }
+    private function if_is_number($array) {
+        
+        for ($i=0;$i < count($array);$i++) {
+            if (!is_numeric($array[$i])) return false;
+            
+        }
+        return true;
+    }
+    private function if_is_number_int($array) {
+        $tmp = 0;
+        for ($i=0;$i < count($array);$i++) {
+              $tmp = (int) $array[$i];
+              if ($tmp != $array[$i]) return false;
+                      
+            
+        }
+        return true;
         
     }
     private function update_diseases($id_patient) {
@@ -85,13 +108,12 @@ class Controller_ajax_doctor extends BaseController
         
         
     }
-    private function save_field(string $field) {
+    private function save_field() {
         $doctor = new \App\Visit();
         $doctor->patients_id = Input::get("patient_id");
         $doctor->doctors_id = Input::get("doctor_id");
         $doctor->visit_text = Input::get("visit_text");
         $doctor->date = date("Y-m-d H:i:s");
-        $doctor->drugs = $field;
         $doctor->visit_id = Input::get("id_visit");
         $doctor->save();
         $id_last = $doctor->orderBy("id","DESC")->limit(1)->get();
@@ -119,6 +141,7 @@ class Controller_ajax_doctor extends BaseController
         }
         
     }
+    /*
     private function implode_field() {
         $field1 = implode("<br>",Input::get("drugs1"));
         $field2 = implode("<br>",Input::get("drugs2"));
@@ -130,11 +153,12 @@ class Controller_ajax_doctor extends BaseController
         return $field1 . "/" . $field2 . "/" . $field3 . "/" . $field4 . "/" . $field5 . "/" . $field6 . "/" . $field7;
         
     }
+    */
     
-    
-    private function check_correctness_field(array $field) {
-        if (empty($field)) return true;
+    private function check_correctness_field($field) {
+        if (!isset($field)) return true;
         for ($i=0;$i < count($field);$i++) {
+            
             if ($field[$i] == "") return false;
             
         }

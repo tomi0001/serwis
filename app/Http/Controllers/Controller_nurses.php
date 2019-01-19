@@ -1,5 +1,8 @@
 <?php
-
+/*
+ * Autor Tomasz Leszczyński - tomi0001@gmail.com 2019
+ * Wszelkie prawa zastrzeżone 
+ */
 namespace App\Http\Controllers;
 
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -53,6 +56,8 @@ class Controller_nurses extends BaseController
     
     
     public function add_patients_action() {
+      $user = new \App\Http\Controllers\user();
+      if ( (Auth::check()) and $user->check_if_what_admin_nurses_doctor(3) ) {
         $int = (int) Input::get("nr");
         if (Input::get("name") == "") {
             array_push($this->errors,"Podaj imię pacjenta");
@@ -98,6 +103,10 @@ class Controller_nurses extends BaseController
             $this->save_patients();
             return redirect("/nurses/add_patients")->with("succes","Pomyslnie dodano pacjenta");
         }
+      }
+      else {           
+            return Redirect('/nurses/login')->with('error','Wylogowałeś się');
+      }
     }
     private function save_patients() {
         $patients = new \App\Patient();
@@ -199,7 +208,6 @@ class Controller_nurses extends BaseController
 
         
         $list = $patients->paginate($this->page);
-        //$list = $patients->withPath('custom/url');
         return $list;
     }
     public function patients_list_id(int $id) {
@@ -230,7 +238,6 @@ class Controller_nurses extends BaseController
                $patients->orderBy(Input::get('sort'),"desc");
         }
                 $list = $patients->paginate($this->page);
-                //var_dump($list);
         
         return $list;
     }

@@ -1,7 +1,14 @@
 @extends('layout.index_doctor')
 @section('content')
 <div id='body_patients'>
+    
     <div class="center">
+        @foreach ($name_patients as $name)
+    {{$name->name}}
+    {{$name->lastname}}
+    
+    @endforeach
+    <br>
         <span class="visit">Opis wizyty</span>
     </div>
     <form method="get">
@@ -33,6 +40,9 @@
                     </td>
                     <td width="10%">
                         Ilość tabletek
+                    </td>
+                    <td width="10%">
+                        
                     </td>
                     
                 </tr>
@@ -73,29 +83,7 @@
                 @endforeach
                 </tbody>
                   
-                <tr class="drugs" id="hide_tr">
-                    <td width="30%">
-                        <input type="text" name=drugs1[] class="form-control">
-                    </td>
-                <td width="10%">
-                            <input type="text" name="drugs2[]" class="form-control">
-                </td>
-                <td width="10%"><input type="text" name="drugs3[]" class="form-control">
-                </td>
-                <td width="10%">
-                    <input type="text" name="drugs4[]" class="form-control">
-                </td><td width="10%">
-                    <input type="text" name="drugs5[]" class="form-control">
-                </td>
-                <td width="10%">
-                    <input type="text" name="drugs6[]" class="form-control">
-                </td>
-                <td width="10%">
-                <input type="text" name="drugs7[]" class="form-control">
-                <td>
-                    <button onclick="delete_drugs()"  class="btn btn-primary">Usuń wpis</button>
-                </td>
-                </tr>
+
               
                 <table class="table drug">
                     

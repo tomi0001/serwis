@@ -1,5 +1,8 @@
 <?php
-
+/*
+ * Autor Tomasz Leszczyński - tomi0001@gmail.com 2019
+ * Wszelkie prawa zastrzeżone 
+ */
 namespace App\Http\Controllers;
 
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -27,6 +30,7 @@ class Controller_ajax_nurses extends BaseController
         $int = $date_hour + $hour2->min * 60;
         $date_hour = $hour2->rename_hour_at_int($hour);
         $date_hour_close = date("Y-m-d H:i:s",$int);
+        
         $date_now = $hour2->rename_hour_at_int(date("Y-m-d H:i:s"));
         if ( (Auth::check()) or $user->check_if_what_admin_nurses_doctor(3) ) {
         
@@ -43,28 +47,23 @@ class Controller_ajax_nurses extends BaseController
             }
         }
       }
-        //    print "d";
         
     }
     private function check_if_is_visit_register($hour,$hour_close) {
         
         $visit = new \App\patients_register();
         $hour2 = new \App\Http\Controllers\hours_of_reception();
-        
-        //$count = $visit->whereRaw("(date >= '$hour' and date_close >= '$hour_close')")->get();
-        //print count($count);
-  
         $count = $visit
                 ->where("date",">=",$hour)
                 ->where("date_close","<=",$hour_close)
-                ->where("doctors_id","=",Input::get("doctor"))->get();
+                ->where("doctors_id","=",Input::get("doctor"))->count();
         $count2 = $visit
                 ->where("date",">=",$hour)
                 ->where("date_close","<=",$hour_close)
-                ->where("patients_id","=",Input::get("patients"))->get();
+                ->where("patients_id","=",Input::get("patients"))->count();
         
  
-        if ( count($count) == 0  and count($count) == 0) return true;
+        if ( $count == 0  and $count2 == 0) return true;
         else {
             return false;
         }

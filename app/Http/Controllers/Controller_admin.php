@@ -1,4 +1,9 @@
 <?php
+/*
+ * Autor Tomasz Leszczyński - tomi0001@gmail.com 2019
+ * Wszelkie prawa zastrzeżone 
+ */
+
 
 namespace App\Http\Controllers;
 
@@ -295,18 +300,13 @@ class Controller_admin extends BaseController
         
     }
     public function check_hour_doctor($hour,int $nr) {
-        //$error = array();
         $i = 0;
         $bool = false;
         if ($len = strlen($hour) != 5) {
-            //$error[$i] = "Godzina $nr musi się skałdać z 5 znaków";
             array_push($this->errors,"Godzina $nr musi się składać z 5 znaków");
-          //  $i++;
         }
         if ($sub = substr_count($hour,":") != 1) {
-            //$error[$i] = "Godziny $nr nie są poprzedzone znakiem :";
             array_push($this->errors,"Godziny $nr nie są poprzedzone znakiem :");
-            //$i++;
         }
         if ($sub != 1 ) {
             
@@ -315,7 +315,6 @@ class Controller_admin extends BaseController
              if (!preg_match ('/^[0-9]+$/', $division[1])) $bool = true;
              if ($bool == true) array_push ($this->errors, "Godzina $nr musi być wartością numeryczną");
         }
-        //return $error;
     }
     public function sukces() {
         $user = new \App\Http\Controllers\user();

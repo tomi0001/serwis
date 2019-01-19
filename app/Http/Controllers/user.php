@@ -1,5 +1,8 @@
 <?php
-
+/*
+ * Autor Tomasz Leszczyński - tomi0001@gmail.com 2019
+ * Wszelkie prawa zastrzeżone 
+ */
 namespace App\Http\Controllers;
 
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -29,7 +32,6 @@ class user extends BaseController
         else return true;
     }
     public function check_flap_for_doctor($type,$admin) {
-        //$admin = new \App\Http\Controllers\Controller_admin();
         if (Input::get("name") == "") {
             array_push($admin->errors, "Uzupełnij pole imię");
             

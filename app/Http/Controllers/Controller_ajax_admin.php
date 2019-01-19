@@ -1,5 +1,8 @@
 <?php
-
+/*
+ * Autor Tomasz Leszczyński - tomi0001@gmail.com 2019
+ * Wszelkie prawa zastrzeżone 
+ */
 namespace App\Http\Controllers;
 
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -51,7 +54,6 @@ class Controller_ajax_admin extends BaseController
             array_push($admin->errors, "Godzina 1 jest większa od godziny drugiej");
         }
         $bool = false;
-        //print Input::get("password_new");
         if (Input::get("password") != "" or Input::get("password_new") != "" ) {
             $result = $user->check_password(Input::get("password"),Input::get("password_new"));
             if ($result == false) {

@@ -1,26 +1,25 @@
+/*
 function add_patients() {
     
     alert("dobrze");
 }
-
+*/
 
 function register_patients(i,hour,load) {
     var patients = $("#patients_" + i).val();
     var doctor = $("#doctor_" + i).val();
-    //alert(hour);
-    
     $("#register_to_doctor_" + i).load(load + "?patients=" + patients + "&doctor=" + doctor + "&hour=" + hour);
 
-    
+  
 }
-
+/*
 function hide_div() {
     alert("dobrze");
         //$(div).hide(120);
     
     
 }
-
+*/
 function modyfik_setting(url) {
     var visit = $("#how_visit").val();  
     $("#modyfik_setting").load(url + "?visit=" + visit);
@@ -47,27 +46,11 @@ function delete_visit(url,id) {
     
     
 }
-var i;
-var bool = true;
-function delete_drugs(nazwa) {
-    var f = $("<tr>");
-    $(f).remove();
-    //if(nazwa=document.getElementById(nazwa))nazwa.parentNode.removeChild(nazwa)
-    
-    
-}
+
 function add_drugs() {
-        //if (bool == true) {
-          //  $(".drug").append("<tr class=\"drugs\" ><td width=\"30%\"><input type=\"text\" name=drugs1[" + i + "] class=\"form-control\"></td><td width=\"10%\"><input type=\"text\" name=\"drugs2["+ i + "]\" class=\"form-control\"></td><td width=\"10%\"><input type=\"text\" name=\"drugs3["+ i + "]\" class=\"form-control\"></td><td width=\"10%\"><input type=\"text\" name=\"drugs4["+ i + "]\" class=\"form-control\"></td><td width=\"10%\"><input type=\"text\" name=\"drugs5["+ i + "]\" class=\"form-control\"></td><td width=\"10%\"><input type=\"text\" name=\"drugs6["+ i + "]\" class=\"form-control\"></td><td width=\"10%\"><input type=\"text\" name=\"drugs7["+ i + "]\" class=\"form-control\"></tr>");
-        //}
-        //else {
-          //  i++;
-            
-            //$("#hide_tr").show();
-            $("#drugss .drugs:first").clone().appendTo($("#drugss"));
-            //$bool = false;onclick="delete_drugs('f')"  id = 'f'
-        //}
-        
+
+            $("#drugss").append("<tr class='drugs' id='drug_'><td width='30'><input type='text' name='drugs1[]' class='form-control'></td><td width='10%'><input type='text' name='drugs2[]' class='form-control'></td><td width='10%'><input type='text' name='drugs3[]' class='form-control'></td><td width='10%'><input type='text' name='drugs4[]' class='form-control'></td><td width='10%'><input type='text' name='drugs5[]' class='form-control'></td><td width='10%'><input type='text' name='drugs6[]' class='form-control'></td><td width='10%'><input type='text' name='drugs7[]' class='form-control'><td><button onclick='delete_drugs()'  class='btn btn-primary drugsss'>Usuń wpis</button></td></tr>");
+
 }
 function delete_drugs() {
     
@@ -77,7 +60,6 @@ function delete_drugs() {
     
     }
 function save_visit(url) {
-    alert($( "form" ).serialize());
     $("#ajax").load(url + "?" + $( "form" ).serialize());
     
 }

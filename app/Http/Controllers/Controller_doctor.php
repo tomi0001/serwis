@@ -1,5 +1,8 @@
 <?php
-
+/*
+ * Autor Tomasz Leszczyński - tomi0001@gmail.com 2019
+ * Wszelkie prawa zastrzeżone 
+ */
 namespace App\Http\Controllers;
 
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -15,10 +18,15 @@ use App;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 class Controller_doctor extends BaseController
-{
+{   
+    public $diseases = array();
+    public $visit_text = array();
+    public $drugs = array();
     public $list_patients = array();
     public $i = 0;
     public $id_visit;
+    public $patients_id;
+    public $doctor_id;
     public function login_doctor() {
         
         $user = new \App\Http\Controllers\user();
@@ -67,6 +75,7 @@ class Controller_doctor extends BaseController
         $list = $doctor->where("date",">=",$date)
                 ->where("date","<=",$date_close)
                 ->where("doctors_id",$this->select_id_doctors(Auth()->id()))
+                ->orderBy("date","DESC")
                 ->get();
        
         foreach ($list as $list2) {
@@ -128,11 +137,16 @@ class Controller_doctor extends BaseController
     public function patients_list(int $id,int $id_visit) {
         $user = new \App\Http\Controllers\user();
         if ( (Auth::check()) and $user->check_if_what_admin_nurses_doctor(2) ) {
+            $bool = false;
             $list = $this->select_visit_id($id);
             $name = $this->select_name_patients_id($id);
+            if ($this->check_if_visit_was( $id_visit)) $bool  = true;
+            
             return View("visit_patients_id")->with("list",$list)
                     ->with("name",$name)
-                    ->with("id_visit",$id_visit);
+                    ->with("id_visit",$id_visit)
+                    ->with('if_visit',$bool)
+                    ->with("name_patients",$name);
         }
         else {
             
@@ -144,6 +158,68 @@ class Controller_doctor extends BaseController
         $name = $patients->where("id",$id)->get();
         return $name;
     }
+    private function check_if_login_doctor_may_view_patients(int $id_users,int $id_visit) {
+        $doctor = new \App\Doctor();
+        $date_start = date("Y-m-d") . " 00:00:34";
+        $date_end = date("Y-m-d") . " 23:59:59";
+        $id_patients = $this->select_id_patients($id_visit);
+        $count = $doctor->join("users","users.id","doctors.id_users")
+                ->join("patients_registers","patients_registers.patients_id","patients_registers.patients_id")
+                ->where("users.id",$id_users)
+                ->where("patients_registers.patients_id",$id_patients)->count();
+        if ($count > 0) return true;
+        else return false;
+        
+    }
+    private function select_id_patients(int $id_visit) {
+        $visit = new \App\Visit();
+        $id = $visit->where("id",$id_visit)->get();
+        foreach ($id as $id2) return $id2->id;
+        
+    }
+    
+    private function select_name_doctor_id(int $id) {
+        $doctor = new \App\Doctor();
+        $name = $doctor->where("id",$id)->get();
+        return $name;
+        
+    }
+    public function visit_patients_old(int $id) {
+        $user = new \App\Http\Controllers\user();
+        if ( (Auth::check()) and $user->check_if_what_admin_nurses_doctor(2) ) {
+            $this->select_old_visit($id);
+            $name_patients = $this->select_name_patients_id($this->patients_id);
+            $name_doctor = $this->select_name_doctor_id($this->doctors_id);
+            return View("visit_old_doctor")->with("visit_text",$this->visit_text)
+                    ->with("drugs",$this->drugs)
+                    ->with("diseases",$this->diseases)
+                    ->with("name_patients",$name_patients)
+                    ->with("name_doctor",$name_doctor);
+            
+        }
+        
+        
+    }
+    
+    
+    
+    private function select_old_visit(int $id) {
+        $visit = new \App\Visit();
+        $array_visit = array();
+        $visit_text = $visit
+                ->where("visits.id",$id)->get();
+        foreach ($visit_text as $text) {
+            $this->visit_text["visit_text"] = $text->visit_text;
+            $this->patients_id = $text->patients_id;
+            $this->doctors_id = $text->doctors_id;
+            //$array_visit["date"] = $text->date;
+            //$visit_id = $text->visit_id;
+            $this->drugs = $this->select_drugs_last_visit( $text->visit_id,$text->patients_id,false);
+            $this->diseases = $this->check_diseases($text->visit_id);
+            
+        }
+        
+    }
     private function select_visit_id(int $id) {
         $patients = new \App\Patients_register();
         $list = $patients->selectRaw("patients_registers.patients_id as patients_id")
@@ -151,15 +227,28 @@ class Controller_doctor extends BaseController
                 ->selectRaw("doctors.id as id")
                 ->selectRaw("doctors.name as name")
                 ->selectRaw("doctors.lastname as lastname")
+                ->selectRaw("visits.id as visits_id")
                 ->join("doctors","patients_registers.doctors_id","doctors.id")
-                ->where("patients_id",$id)
+                ->join("visits","visits.visit_id","patients_registers.id")
+                ->where("patients_registers.patients_id",$id)
                 ->where("if_visit",1)
                 ->orderBy("date","DESC")->paginate(10);
         return $list;
         
     }
-    private function select_drugs_last_visit( int $id_visit,int $patient_id) {
+    private function select_last_visit(int $id_patient) {
+        $drug = new \App\Drug();
+        $list = $drug->where("patients_id",$id_patient)
+                          ->orderBy("id_visit","DESC")
+                          ->limit(1)
+                           ->get();
+        foreach ($list as $list2) return $list2->id_visit;
+        
+    }
+    private function select_drugs_last_visit( int $id_visit,int $patient_id,$bool = true) {
         $patients = new \App\Drug();
+        if ($bool == true) $last_visit = $this->select_last_visit($patient_id);
+        else $last_visit = $id_visit;
         $list = $patients->selectRaw("name as name")
                 ->selectRaw("field1 as field1")
                 ->selectRaw("field2 as field2")
@@ -169,15 +258,11 @@ class Controller_doctor extends BaseController
                 ->selectRaw("field6  as field6")
                 ->selectRaw("drugs.id_visit as id_visit")
                 ->join("visits","visits.visit_id","drugs.id_visit")
-                ->where("drugs.patients_id",$patient_id)
+                ->where("id_visit",$last_visit)
                 ->get();
         
         
             return $list;
-            //return $drugs->drugs;
-        
-        
-        //dd($div_drugs);
         
     }
     
@@ -210,6 +295,7 @@ class Controller_doctor extends BaseController
         }
         
     }
+
     private function check_if_visit_was(int $id_visit) {
         $visit = new \App\Patients_register();
         $if_visit = $visit->where("id",$id_visit)->where("if_visit",1)->count();
@@ -217,21 +303,24 @@ class Controller_doctor extends BaseController
         else return true;
     }
     public function new_visit(int  $id_visit) {
-
-         
+      $user = new \App\Http\Controllers\user();
+      if ( (Auth::check()) and $user->check_if_what_admin_nurses_doctor(2) ) {
         $diseases = $this->check_diseases($id_visit);
 
         $doctor_id = $this->select_id_doctor($id_visit);
         $patient_id = $this->select_id_patient($id_visit);
+        $name_patients = $this->select_name_patients_id($patient_id);
         $drugs = $this->select_drugs_last_visit($id_visit,$patient_id);
         if ($this->check_if_visit_was( $id_visit) == true ) {
             return View("new_visit_doctor")->with("id_visit",$id_visit)
                     ->with("diseases",$diseases)
                     ->with("drugs",$drugs)
                     ->with("patient_id",$patient_id)
-                    ->with("doctor_id",$doctor_id);
+                    ->with("doctor_id",$doctor_id)
+                    ->with("name_patients",$name_patients);
         }
-        
+      }
+      else return view("login_doctor");
     }
     
 

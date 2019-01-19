@@ -56,4 +56,6 @@ Route::get("/doctor/main","Controller_doctor@doctor_main");
 Route::get("/doctor/logout","Controller_doctor@logout_action");
 Route::get("/doctor/patients_list/{id?}/{id_visit?}","Controller_doctor@patients_list");
 Route::get("/doctor/new_visit/{id_visit?}","Controller_doctor@new_visit");
+Route::get("/doctor/visit_patients_old/{id_visit?}","Controller_doctor@visit_patients_old");
+
 Route::get("/doctor/new_visit_submit","Controller_ajax_doctor@save_visit");

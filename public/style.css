@@ -83,6 +83,11 @@ td.center {
     text-align: center;
     
 }
+td.old_visit {
+    text-align: center;
+    color: white;
+    
+}
 span.name {
     color: white;
     font-weight: bold;
@@ -235,6 +240,14 @@ div.center {
     margin-right: auto;
    
 }
+div.old_visit {
+    text-align: center;
+    color: white;
+    width: 80%;
+    font-size: 17px;
+    margin-left: auto;
+    margin-right: auto;
+}
 table.center {
     text-align: center;
     color: white;
@@ -365,4 +378,8 @@ a.admin_setting {
 a.admin_setting:hover {
     color: yellow;
     
+}
+span.bold {
+    
+    font-weight: bold;
 }
